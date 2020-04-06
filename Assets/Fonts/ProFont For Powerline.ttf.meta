@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 54ec0f48130e645a4bb0bbbfb85df76a
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: ProFont for Powerline
+  fontNames:
+  - ProFont for Powerline
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 51aefac7517ac4fae88621ce405a1c93, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
