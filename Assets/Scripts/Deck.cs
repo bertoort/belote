@@ -6,6 +6,7 @@ public class Deck : MonoBehaviour
 {
     [SerializeField]
     private GameObject _cardPrefab;
+    private GameObject _canvas;
 
     private List<Card> _deck = new List<Card>();
     private List<Card> _discardPile = new List<Card>();
@@ -21,8 +22,24 @@ public class Deck : MonoBehaviour
         return Card;
     }
 
+    private GameObject TakeCardInstance(string name)
+    {
+        {
+            Transform[] trs = _canvas.GetComponentsInChildren<Transform>(true);
+            foreach (Transform t in trs)
+            {
+                if (t.name == name)
+                {
+                    return t.gameObject;
+                }
+            }
+            return null;
+        }
+    }
+
     public void Awake()
     {
+        _canvas = GameObject.Find("Screen Space Canvas");
         foreach (SuitEnum suit in System.Enum.GetValues(typeof(SuitEnum)))
         {
             foreach (RankEnum rank in System.Enum.GetValues(typeof(RankEnum)))
@@ -31,19 +48,40 @@ public class Deck : MonoBehaviour
                 Card card = cardInstance.GetComponent<Card>();
                 if (card != null)
                 {
-                    card.Init(suit, rank);
+                    card.transform.SetParent(_canvas.transform);
+                    card.Init(suit, rank, transform.position);
+                    cardInstance.SetActive(false);
                     _deck.Add(card);
                 }
             }
         }
+        Shuffle();
     }
+ 
 
     private void Update()
     {
         if (Input.GetKeyDown("space"))
         {
             Card card = TakeCard();
-            Debug.Log(card);
+            card.transform.position = new Vector3(0, 0, 0);
+            GameObject cardInstance = TakeCardInstance(card.id);
+            if (cardInstance != null)
+            {
+                cardInstance.SetActive(true);
+            }
+        }
+    }
+
+    public void Shuffle()
+    {
+        System.Random random = new System.Random();
+        for (int i = 0; i < _deck.Count; i++)
+        {
+            int j = random.Next(i, _deck.Count);
+            Card temporary = _deck[i];
+            _deck[i] = _deck[j];
+            _deck[j] = temporary;
         }
     }
 
