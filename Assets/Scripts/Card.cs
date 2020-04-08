@@ -31,6 +31,7 @@ public class Card : MonoBehaviour
 
     private GameObject _front;
     private GameObject _back;
+    private bool _faceUp;
 
     public Sprite hearts;
     public Sprite clubs;
@@ -54,6 +55,46 @@ public class Card : MonoBehaviour
     public SuitEnum Suit { get { return _suit; } set { _suit = value; } }
     public RankEnum Rank { get { return _rank; } set { _rank = value; } }
 
+    private void Update()
+    {
+        UpdateFlip();
+    }
+
+    private void UpdateFlip()
+    {
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            this.Flip();
+        }
+        float smooth = 5.0f;
+        float tiltAngle = 60.0f;
+
+        // Smoothly tilts a transform towards a target rotation.
+        float tiltAroundZ = Input.GetAxis("Horizontal") * tiltAngle;
+        float tiltAroundX = Input.GetAxis("Vertical") * tiltAngle;
+        Debug.Log(transform.rotation.y);
+        if (_faceUp && transform.rotation.y < 0f)
+        {
+            Quaternion target = Quaternion.Euler(tiltAroundX, 0, tiltAroundZ);
+            transform.rotation = Quaternion.Slerp(transform.rotation, target, Time.deltaTime * smooth);
+
+        }
+        else if (!_faceUp && transform.rotation.y > -1f)
+        {
+            Quaternion target = Quaternion.Euler(tiltAroundX, 180, tiltAroundZ);
+            transform.rotation = Quaternion.Slerp(transform.rotation, target, Time.deltaTime * smooth);
+
+        }
+        if (transform.rotation.y < -0.7f && !_back.gameObject.activeSelf)
+        {
+            _back.SetActive(true);
+            _front.SetActive(false);
+        } else if (transform.rotation.y > -0.7f && !_front.gameObject.activeSelf)
+        {
+            _back.SetActive(false);
+            _front.SetActive(true);
+        }
+    }
 
     public void Init(SuitEnum suit, RankEnum rank, Vector3 location)
     {
@@ -68,6 +109,8 @@ public class Card : MonoBehaviour
         _suit = suit;
         _rank = rank;
 
+        _back.SetActive(false);
+
         UpdateRank();
         UpdateSuit();
     }
@@ -80,6 +123,10 @@ public class Card : MonoBehaviour
         if (_suit == SuitEnum.Diamonds || _suit == SuitEnum.Hearts)
         {
             rank.color = new Color(0.79f, 0.16f, 0.11f);
+        }
+        if (_rank == RankEnum.Ten)
+        {
+            rank.transform.position += new Vector3(-13.5f, 0, 0);
         }
     }
 
@@ -102,5 +149,10 @@ public class Card : MonoBehaviour
                 renderer.sprite = clubs;
                 break;
         }
+    }
+
+    public void Flip()
+    {
+        _faceUp = !_faceUp;
     }
 }

@@ -64,12 +64,13 @@ public class Deck : MonoBehaviour
         if (Input.GetKeyDown("space"))
         {
             Card card = TakeCard();
-            card.transform.position = new Vector3(0, 0, 0);
+            card.transform.position = new Vector3(0, 0, 200f);
             GameObject cardInstance = TakeCardInstance(card.id);
             if (cardInstance != null)
             {
                 cardInstance.SetActive(true);
             }
+            card.Flip();
         }
     }
 
