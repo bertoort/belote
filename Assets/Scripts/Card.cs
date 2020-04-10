@@ -26,12 +26,11 @@ public enum RankEnum
 
 public class Card : MonoBehaviour
 {
-    private SuitEnum _suit;
-    private RankEnum _rank;
-
     private GameObject _front;
     private GameObject _back;
-    private bool _faceUp;
+    [SerializeField]
+    private bool _faceUp = false;
+    private Vector3 _target;
 
     public Sprite hearts;
     public Sprite clubs;
@@ -51,28 +50,40 @@ public class Card : MonoBehaviour
     };
 
     public string id;
-    
-    public SuitEnum Suit { get { return _suit; } set { _suit = value; } }
-    public RankEnum Rank { get { return _rank; } set { _rank = value; } }
+
+    public SuitEnum Suit { get; set; }
+    public RankEnum Rank { get; set; }
 
     private void Update()
     {
-        UpdateFlip();
+        bool change = UpdatePosition();
+        if (!change)
+        {
+            UpdateFlip();
+        }
+    }
+
+    private bool UpdatePosition()
+    {
+        float smooth = 1000.0f;
+        float stopDistance = 10f;
+        
+        if (Vector3.Distance(transform.position, _target) > stopDistance)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, _target, smooth * Time.deltaTime);
+            return true;
+        }
+        return false;
     }
 
     private void UpdateFlip()
     {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            this.Flip();
-        }
         float smooth = 5.0f;
         float tiltAngle = 60.0f;
 
-        // Smoothly tilts a transform towards a target rotation.
         float tiltAroundZ = Input.GetAxis("Horizontal") * tiltAngle;
         float tiltAroundX = Input.GetAxis("Vertical") * tiltAngle;
-        Debug.Log(transform.rotation.y);
+
         if (_faceUp && transform.rotation.y < 0f)
         {
             Quaternion target = Quaternion.Euler(tiltAroundX, 0, tiltAroundZ);
@@ -85,6 +96,7 @@ public class Card : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, target, Time.deltaTime * smooth);
 
         }
+        Debug.Log(transform.rotation.y);
         if (transform.rotation.y < -0.7f && !_back.gameObject.activeSelf)
         {
             _back.SetActive(true);
@@ -100,16 +112,17 @@ public class Card : MonoBehaviour
     {
         transform.position = location;
         transform.localScale = new Vector3(1.39f, 1.39f, 1);
+        transform.rotation = Quaternion.Euler(0, -180, 0);
         id = string.Format("Card_{0}_{1}", suit, rank);
         gameObject.name = id;
 
         _back = transform.Find("Back").gameObject;
         _front = transform.Find("Front").gameObject;
 
-        _suit = suit;
-        _rank = rank;
+        Suit = suit;
+        Rank = rank;
 
-        _back.SetActive(false);
+        _front.SetActive(false);
 
         UpdateRank();
         UpdateSuit();
@@ -119,14 +132,14 @@ public class Card : MonoBehaviour
     {
         GameObject rankObject = _front.transform.Find("Rank Canvas/Rank").gameObject;
         Text rank = rankObject.GetComponent<Text>();
-        rank.text = Ranks[_rank];
-        if (_suit == SuitEnum.Diamonds || _suit == SuitEnum.Hearts)
+        rank.text = Ranks[Rank];
+        if (Suit == SuitEnum.Diamonds || Suit == SuitEnum.Hearts)
         {
             rank.color = new Color(0.79f, 0.16f, 0.11f);
         }
-        if (_rank == RankEnum.Ten)
+        if (Rank == RankEnum.Ten)
         {
-            rank.transform.position += new Vector3(-13.5f, 0, 0);
+            rank.transform.position += new Vector3(13.5f, 0, 0);
         }
     }
 
@@ -134,7 +147,7 @@ public class Card : MonoBehaviour
     {
         GameObject suitObject = _front.transform.Find("Suit").gameObject;
         SpriteRenderer renderer = suitObject.GetComponent<SpriteRenderer>();
-        switch (_suit)
+        switch (Suit)
         {
             case SuitEnum.Hearts:
                 renderer.sprite = hearts;
@@ -154,5 +167,29 @@ public class Card : MonoBehaviour
     public void Flip()
     {
         _faceUp = !_faceUp;
+    }
+
+    public void Move(Vector3 target)
+    {
+        _target = target;
+    }
+
+    public void Move(Vector3 target, bool flip)
+    {
+        if (flip)
+        {
+            Flip();
+        }
+        _target = target;
+    }
+
+    public void Move(Vector3 start, Vector3 target, bool flip)
+    {
+        if (flip)
+        {
+            Flip();
+        }
+        transform.position = start;
+        _target = target;
     }
 }

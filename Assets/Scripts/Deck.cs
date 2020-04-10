@@ -9,7 +9,11 @@ public class Deck : MonoBehaviour
     private GameObject _canvas;
 
     private List<Card> _deck = new List<Card>();
-    private List<Card> _discardPile = new List<Card>();
+
+    public void Init(Vector3 position)
+    {
+        transform.position = position;
+    }
 
     public Card TakeCard()
     {
@@ -57,21 +61,17 @@ public class Deck : MonoBehaviour
         }
         Shuffle();
     }
- 
 
-    private void Update()
+    public void DealCard(Vector3 position, bool faceUp)
     {
-        if (Input.GetKeyDown("space"))
+        Debug.Log("dealing card");
+        Card card = TakeCard();
+        GameObject cardInstance = TakeCardInstance(card.id);
+        if (cardInstance != null)
         {
-            Card card = TakeCard();
-            card.transform.position = new Vector3(0, 0, 200f);
-            GameObject cardInstance = TakeCardInstance(card.id);
-            if (cardInstance != null)
-            {
-                cardInstance.SetActive(true);
-            }
-            card.Flip();
+            cardInstance.SetActive(true);
         }
+        card.Move(transform.position, position, faceUp);
     }
 
     public void Shuffle()
