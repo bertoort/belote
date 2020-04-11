@@ -9,6 +9,9 @@ public class Deck : MonoBehaviour
     private GameObject _canvas;
 
     private List<Card> _deck = new List<Card>();
+    private List<Card> _playerOne = new List<Card>();
+    private List<Card> _playerTwo = new List<Card>();
+    private List<Card> _kitty = new List<Card>();
 
     public void Init(Vector3 position)
     {
@@ -64,7 +67,6 @@ public class Deck : MonoBehaviour
 
     public void DealCard(Vector3 position, bool faceUp)
     {
-        Debug.Log("dealing card");
         Card card = TakeCard();
         GameObject cardInstance = TakeCardInstance(card.id);
         if (cardInstance != null)

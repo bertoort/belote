@@ -1,25 +1,31 @@
-﻿using System.Collections;
+﻿using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
+using UnityEngine.UI;
 
 public class Dealer : MonoBehaviour
 {
     [SerializeField]
     private GameObject _deckPrefab;
+    [SerializeField]
+    private GameObject _buttonPrefab;
+
+    private GameObject _startButton;
     private GameObject _canvas;
+    private GameObject _world;
     private Deck _deck;
+    private bool _started;
 
     void Start()
     {
+        AddStartButton();
         AddDeck();
     }
 
     void Update()
     {
-        if (Input.GetKeyDown("space"))
-        {
-            DealCards();
-        }
+        Button button = _startButton.GetComponent<Button>();
+        button.onClick.AddListener(StartGame);
     }
 
     public void DealCards()
@@ -50,6 +56,24 @@ public class Dealer : MonoBehaviour
         _deck.DealCard(new Vector3(550, 50, 205f), false);
         _deck.DealCard(new Vector3(600, 0, 200f), false);
         _deck.DealCard(new Vector3(650, -50, 195f), false);
+    }
+
+    public void StartGame()
+    {
+        if (!_started)
+        {
+            _started = true;
+            _startButton.SetActive(false);
+            DealCards();
+        }
+    }
+
+    public void AddStartButton()
+    {
+        _world = GameObject.Find("World Canvas");
+        _startButton = Instantiate(_buttonPrefab);
+        _startButton.transform.position = new Vector3(0, 0, 300);
+        _startButton.transform.SetParent(_world.transform);
     }
 
     public void AddDeck()
