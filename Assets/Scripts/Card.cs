@@ -23,20 +23,18 @@ public enum RankEnum
     Seven = 7,
 }
 
-
 public class Card : MonoBehaviour
 {
-    private GameObject _front;
-    private GameObject _back;
+    private GameObject front;
+    private GameObject back;
     [SerializeField]
-    private bool _faceUp = false;
-    private Vector3 _target;
+    private bool faceUp = false;
+    private Vector3 target;
 
     public Sprite hearts;
     public Sprite clubs;
     public Sprite diamonds;
     public Sprite spades;
-
 
     public Dictionary<RankEnum, string> Ranks = new Dictionary<RankEnum, string>() {
         { RankEnum.Ace, "A" },
@@ -68,9 +66,9 @@ public class Card : MonoBehaviour
         float smooth = 1000.0f;
         float stopDistance = 10f;
         
-        if (Vector3.Distance(transform.position, _target) > stopDistance)
+        if (Vector3.Distance(transform.position, target) > stopDistance)
         {
-            transform.position = Vector3.MoveTowards(transform.position, _target, smooth * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, target, smooth * Time.deltaTime);
             return true;
         }
         return false;
@@ -84,45 +82,44 @@ public class Card : MonoBehaviour
         float tiltAroundZ = Input.GetAxis("Horizontal") * tiltAngle;
         float tiltAroundX = Input.GetAxis("Vertical") * tiltAngle;
 
-        if (_faceUp && transform.rotation.y < 0f)
+        if (faceUp && transform.rotation.y < 0f)
         {
             Quaternion target = Quaternion.Euler(tiltAroundX, 0, tiltAroundZ);
             transform.rotation = Quaternion.Slerp(transform.rotation, target, Time.deltaTime * smooth);
 
         }
-        else if (!_faceUp && transform.rotation.y > -1f)
+        else if (!faceUp && transform.rotation.y > -1f)
         {
             Quaternion target = Quaternion.Euler(tiltAroundX, 180, tiltAroundZ);
             transform.rotation = Quaternion.Slerp(transform.rotation, target, Time.deltaTime * smooth);
 
         }
-        Debug.Log(transform.rotation.y);
-        if (transform.rotation.y < -0.7f && !_back.gameObject.activeSelf)
+        if (transform.rotation.y < -0.7f && !back.gameObject.activeSelf)
         {
-            _back.SetActive(true);
-            _front.SetActive(false);
-        } else if (transform.rotation.y > -0.7f && !_front.gameObject.activeSelf)
+            back.SetActive(true);
+            front.SetActive(false);
+        } else if (transform.rotation.y > -0.7f && !front.gameObject.activeSelf)
         {
-            _back.SetActive(false);
-            _front.SetActive(true);
+            back.SetActive(false);
+            front.SetActive(true);
         }
     }
 
-    public void Init(SuitEnum suit, RankEnum rank, Vector3 location)
+    public void Init(SuitEnum suit, RankEnum rank, Vector3 location, Vector3 scale)
     {
         transform.position = location;
-        transform.localScale = new Vector3(1.39f, 1.39f, 1);
+        transform.localScale = scale;
         transform.rotation = Quaternion.Euler(0, -180, 0);
-        id = string.Format("Card_{0}_{1}", suit, rank);
+        id = string.Format("Card{0}{1}", suit, rank);
         gameObject.name = id;
 
-        _back = transform.Find("Back").gameObject;
-        _front = transform.Find("Front").gameObject;
+        back = transform.Find("Back").gameObject;
+        front = transform.Find("Front").gameObject;
 
         Suit = suit;
         Rank = rank;
 
-        _front.SetActive(false);
+        front.SetActive(false);
 
         UpdateRank();
         UpdateSuit();
@@ -130,7 +127,7 @@ public class Card : MonoBehaviour
 
     public void UpdateRank()
     {
-        GameObject rankObject = _front.transform.Find("Rank Canvas/Rank").gameObject;
+        GameObject rankObject = front.transform.Find("Rank Canvas/Rank").gameObject;
         Text rank = rankObject.GetComponent<Text>();
         rank.text = Ranks[Rank];
         if (Suit == SuitEnum.Diamonds || Suit == SuitEnum.Hearts)
@@ -145,7 +142,7 @@ public class Card : MonoBehaviour
 
     public void UpdateSuit()
     {
-        GameObject suitObject = _front.transform.Find("Suit").gameObject;
+        GameObject suitObject = front.transform.Find("Suit").gameObject;
         SpriteRenderer renderer = suitObject.GetComponent<SpriteRenderer>();
         switch (Suit)
         {
@@ -166,30 +163,30 @@ public class Card : MonoBehaviour
 
     public void Flip()
     {
-        _faceUp = !_faceUp;
+        faceUp = !faceUp;
     }
 
-    public void Move(Vector3 target)
+    public void Move(Vector3 newTarget)
     {
-        _target = target;
+        target = newTarget;
     }
 
-    public void Move(Vector3 target, bool flip)
+    public void Move(Vector3 newTarget, bool flip)
     {
         if (flip)
         {
             Flip();
         }
-        _target = target;
+        target = newTarget;
     }
 
-    public void Move(Vector3 start, Vector3 target, bool flip)
+    public void Move(Vector3 start, Vector3 newTarget, bool flip)
     {
         if (flip)
         {
             Flip();
         }
         transform.position = start;
-        _target = target;
+        target = newTarget;
     }
 }

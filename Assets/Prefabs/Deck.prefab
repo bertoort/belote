@@ -36,7 +36,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 7, y: 8}
+  m_SizeDelta: {x: 3.1, y: 4.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &881992030218811970
 CanvasRenderer:
@@ -45,7 +45,7 @@ CanvasRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 881992030218811981}
-  m_CullTransparentMesh: 0
+  m_CullTransparentMesh: 1
 --- !u!212 &881992030218811971
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -107,5 +107,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88bc5966d155d4b909740b48cc3e5800, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cardPrefab: {fileID: 3717253539258406605, guid: 34096c3b2ad9544c381247337510a9d3,
+  cardPrefab: {fileID: 3717253539258406605, guid: 34096c3b2ad9544c381247337510a9d3,
     type: 3}
