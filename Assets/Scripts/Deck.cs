@@ -52,10 +52,10 @@ public class Deck : MonoBehaviour
         if (deck.Count == 0)
             return null;
 
-        Card Card = deck[0];
+        Card card = deck[0];
         deck.RemoveAt(0);
 
-        return Card;
+        return card;
     }
 
     private GameObject TakeCardInstance(string name)
@@ -114,4 +114,53 @@ public class Deck : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    public void FlipKitty(float kittyDistance)
+    {
+        for (int i = 0; i < kitty.Count; i++)
+        {
+            Vector3 currentPosition = kitty[i].transform.position;
+            kitty[i].Move(
+                currentPosition,
+                new Vector3(currentPosition.x + (kittyDistance * i * 2), currentPosition.y - (kittyDistance * (i - 1)), currentPosition.z),
+                true
+            );
+        }
+    }
+    
+    public void RemovePlayerOneCards(Vector3 target)
+    {
+        for (int i = 0; i < playerOne.Count; i++)
+        {
+            playerOne[i].Move(playerOne[i].transform.position, target, false);
+        }
+    }
+
+    public void RemovePlayerTwoCards(Vector3 target)
+    {
+        for (int i = 0; i < playerTwo.Count; i++)
+        {
+            playerTwo[i].Move(playerTwo[i].transform.position, target, false);
+        }
+    }
+
+    public void MoveKittyY(float y, bool toPlayerOne)
+    {
+        for (int i = 0; i < kitty.Count; i++)
+        {
+            kitty[i].Move(
+               kitty[i].transform.position,
+               new Vector3(kitty[i].transform.position.x, y, kitty[i].transform.position.z),
+               false
+           );
+            if (toPlayerOne)
+            {
+                playerOne.Add(kitty[i]);
+            }
+            else
+            {
+                playerTwo.Add(kitty[i]);
+            }
+        }
+        kitty.Clear();
+    }
 }

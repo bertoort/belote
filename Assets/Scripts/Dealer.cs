@@ -25,6 +25,11 @@ public class Dealer : MonoBehaviour
     private Deck deck;
     private bool started;
 
+    float kittyDistance;
+    float topPlayerY;
+    float lowerPlayerY;
+    float overCardDistance;
+
     void Start()
     {
         screenBounds = MainCamera.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, MainCamera.transform.position.z));
@@ -38,17 +43,39 @@ public class Dealer : MonoBehaviour
     {
         Button button = startButton.GetComponent<Button>();
         button.onClick.AddListener(StartGame);
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            deck.FlipKitty(kittyDistance);
+        }
+        if (Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            deck.RemovePlayerOneCards(new Vector3(0, screenBounds.y + 200, 0));
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            deck.RemovePlayerTwoCards(new Vector3(0, (screenBounds.y * -1) - 200, 0));
+        }
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            deck.MoveKittyY(topPlayerY + overCardDistance, true);
+        }
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            deck.MoveKittyY(lowerPlayerY + overCardDistance, false);
+        }
     }
 
     public void DealCards()
     {
         float shrinkRatio = scaleRatio * spaceAdjustment;
+
+        topPlayerY = 200 * shrinkRatio;
+        lowerPlayerY = -200 * shrinkRatio;
+        overCardDistance = 50 * shrinkRatio;
+
         float cardX = 200 * shrinkRatio;
         float cardZ = 200 * shrinkRatio;
-        float topPlayerY = 200 * shrinkRatio;
-        float lowerPlayerY = -200 * shrinkRatio;
         float nextCardDistance = 200 * shrinkRatio;
-        float overCardDistance = 50 * shrinkRatio;
         int handedCards = 4;
 
         for (int i = 0; i < handedCards; i++)
@@ -56,16 +83,17 @@ public class Dealer : MonoBehaviour
             // top player down           
             deck.DealCard(new Vector3(cardX - (i * nextCardDistance), topPlayerY, cardZ), false, CardHand.PlayerOne);
             // top player up
-            deck.DealCard(new Vector3(cardX - (i * nextCardDistance) - overCardDistance, topPlayerY + overCardDistance, cardZ - overCardDistance), true, CardHand.PlayerTwo);
+            deck.DealCard(new Vector3(cardX - (i * nextCardDistance) - overCardDistance, topPlayerY + overCardDistance, cardZ - overCardDistance), true, CardHand.PlayerOne);
             // bottom player down
-            deck.DealCard(new Vector3(cardX - (i * nextCardDistance), lowerPlayerY, cardZ), false, CardHand.PlayerOne);
+            deck.DealCard(new Vector3(cardX - (i * nextCardDistance), lowerPlayerY, cardZ), false, CardHand.PlayerTwo);
             // bottom player up
             deck.DealCard(new Vector3(cardX - (i * nextCardDistance) - overCardDistance, lowerPlayerY + overCardDistance, cardZ - overCardDistance), true, CardHand.PlayerTwo);
         }
 
         int kittyCards = 3;
+        kittyDistance = 50 * shrinkRatio;
+
         float kittyX = 400 * shrinkRatio;
-        float kittyDistance = 50 * shrinkRatio;
         float kittyDepth = 195 * shrinkRatio;
         float kittyDepthChange = 5 * shrinkRatio;
 

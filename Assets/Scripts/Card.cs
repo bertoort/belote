@@ -64,7 +64,7 @@ public class Card : MonoBehaviour
     private bool UpdatePosition()
     {
         float smooth = 1000.0f;
-        float stopDistance = 10f;
+        float stopDistance = 1f;
         
         if (Vector3.Distance(transform.position, target) > stopDistance)
         {
@@ -173,20 +173,20 @@ public class Card : MonoBehaviour
 
     public void Move(Vector3 newTarget, bool flip)
     {
+        target = newTarget;
         if (flip)
         {
             Flip();
         }
-        target = newTarget;
     }
 
     public void Move(Vector3 start, Vector3 newTarget, bool flip)
     {
+        transform.position = start;
+        target = newTarget;
         if (flip)
         {
             Flip();
         }
-        transform.position = start;
-        target = newTarget;
     }
 }
