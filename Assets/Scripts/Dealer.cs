@@ -25,6 +25,11 @@ public class Dealer : MonoBehaviour
     private Deck deck;
     private bool started;
 
+    public GameObject playerOnePrefab;
+    private Dashboard playerOneDashboard;
+    public GameObject playerTwoPrefab;
+    private Dashboard playerTwoDashboard;
+
     float kittyDistance;
     float topPlayerY;
     float lowerPlayerY;
@@ -103,15 +108,26 @@ public class Dealer : MonoBehaviour
             deck.DealCard(new Vector3(kittyX + (i * kittyDistance), kittyDistance * (i - 1), kittyDepth + (i * kittyDepthChange)), false, CardHand.Kitty);
         }
 
-        // limits
-        //deck.DealCard(new Vector3(0,0, 300), false, CardHand.PlayerOne);
-        //deck.DealCard(new Vector3(screenBounds.x * -1, screenBounds.y * -1, 300), false, CardHand.PlayerOne);
-        //deck.DealCard(new Vector3(screenBounds.x * -1, screenBounds.y, 300), false, CardHand.PlayerOne);
-        //deck.DealCard(new Vector3(screenBounds.x, screenBounds.y * -1, 300), false, CardHand.PlayerOne);
-        //deck.DealCard(new Vector3(screenBounds.x, screenBounds.y, 300), false, CardHand.PlayerOne);
-
-
         deck.Hide();
+    }
+
+    public void DisplayDashboard()
+    {
+        GameObject playerOne = Instantiate(playerOnePrefab);
+        playerOneDashboard = playerOne.GetComponent<Dashboard>();
+        playerOneDashboard.Init();
+
+        GameObject playerTwo = Instantiate(playerTwoPrefab);
+        playerTwoDashboard = playerTwo.GetComponent<Dashboard>();
+        playerTwoDashboard.Init();
+
+        float boardX = 400;
+        float boardY = 50;
+        playerOne.transform.position = new Vector3(screenBounds.x * -1 + boardX, screenBounds.y * -1 + boardY, 300);
+        playerTwo.transform.position = new Vector3(screenBounds.x * -1 + boardX, screenBounds.y - boardY, 300);
+
+        playerOne.transform.SetParent(world.transform);
+        playerTwo.transform.SetParent(world.transform);
     }
 
     public void StartGame()
@@ -121,6 +137,7 @@ public class Dealer : MonoBehaviour
             started = true;
             startButton.SetActive(false);
             DealCards();
+            DisplayDashboard();
         }
     }
 

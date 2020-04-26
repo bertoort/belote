@@ -536,13 +536,49 @@ PrefabInstance:
         type: 3}
       propertyPath: buttonPrefab
       value: 
-      objectReference: {fileID: 4606915298450364486, guid: eee1d09e9bc5641c490aa029bdba03e6,
+      objectReference: {fileID: 1527894046455640196, guid: eee1d09e9bc5641c490aa029bdba03e6,
         type: 3}
     - target: {fileID: 1566256887949606341, guid: 37a745c9ad4cf4016902fe1813b3bc3a,
         type: 3}
       propertyPath: deckPrefab
       value: 
       objectReference: {fileID: 881992030218811981, guid: 442251eb9f7904c42bc479d209165763,
+        type: 3}
+    - target: {fileID: 1566256887949606341, guid: 37a745c9ad4cf4016902fe1813b3bc3a,
+        type: 3}
+      propertyPath: playerOneDashboard
+      value: 
+      objectReference: {fileID: 969991058316401645, guid: 0158ed74362eb425788797a0916bebf2,
+        type: 3}
+    - target: {fileID: 1566256887949606341, guid: 37a745c9ad4cf4016902fe1813b3bc3a,
+        type: 3}
+      propertyPath: playerTwoDashboard
+      value: 
+      objectReference: {fileID: 327513751423148642, guid: 49865866116fc4a89aaf7e9d83c386b6,
+        type: 3}
+    - target: {fileID: 1566256887949606341, guid: 37a745c9ad4cf4016902fe1813b3bc3a,
+        type: 3}
+      propertyPath: playerOneComponent
+      value: 
+      objectReference: {fileID: 969991058316401645, guid: 0158ed74362eb425788797a0916bebf2,
+        type: 3}
+    - target: {fileID: 1566256887949606341, guid: 37a745c9ad4cf4016902fe1813b3bc3a,
+        type: 3}
+      propertyPath: playerTwoComponent
+      value: 
+      objectReference: {fileID: 327513751423148642, guid: 49865866116fc4a89aaf7e9d83c386b6,
+        type: 3}
+    - target: {fileID: 1566256887949606341, guid: 37a745c9ad4cf4016902fe1813b3bc3a,
+        type: 3}
+      propertyPath: playerOnePrefab
+      value: 
+      objectReference: {fileID: 969991058316401645, guid: 0158ed74362eb425788797a0916bebf2,
+        type: 3}
+    - target: {fileID: 1566256887949606341, guid: 37a745c9ad4cf4016902fe1813b3bc3a,
+        type: 3}
+      propertyPath: playerTwoPrefab
+      value: 
+      objectReference: {fileID: 327513751423148642, guid: 49865866116fc4a89aaf7e9d83c386b6,
         type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37a745c9ad4cf4016902fe1813b3bc3a, type: 3}
