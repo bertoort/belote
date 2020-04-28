@@ -25,10 +25,10 @@ public class Deck : MonoBehaviour
     private List<Card> playerTwoDiscard = new List<Card>();
     private List<Card> kitty = new List<Card>();
 
-    public void Init(Vector3 position, float scaleRatio)
+    public void Init(Vector3 position, float scaleRatio, string canvasName)
     {
         transform.position = position;
-        canvas = GameObject.Find("Screen Space Canvas");
+        canvas = GameObject.Find(canvasName);
         foreach (SuitEnum suit in System.Enum.GetValues(typeof(SuitEnum)))
         {
             foreach (RankEnum rank in System.Enum.GetValues(typeof(RankEnum)))

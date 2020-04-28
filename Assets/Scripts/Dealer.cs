@@ -10,18 +10,19 @@ public class Dealer : MonoBehaviour
     [SerializeField]
     private GameObject buttonPrefab;
 
+
     public Camera MainCamera;
     private Vector2 screenBounds;
     private float scaleRatio;
     private float spaceAdjustment = 0.6f;
     private float sizeAdjustment = 0.8f;
 
-    private string screenCanvas = "Screen Space Canvas";
-    private string worldCanvas = "World Canvas";
+    private string screenCanvas = "GameCanvas";
+    private string worldCanvas = "FrontCanvas";
 
     private GameObject startButton;
     private GameObject canvas;
-    private GameObject world;
+    private GameObject front;
     private Deck deck;
     private bool started;
 
@@ -29,6 +30,11 @@ public class Dealer : MonoBehaviour
     private Dashboard playerOneDashboard;
     public GameObject playerTwoPrefab;
     private Dashboard playerTwoDashboard;
+
+    public GameObject trumpSelectionPrefab;
+    public GameObject currentTrumpPrefab;
+    private GameObject trumpSelection;
+    private GameObject currentTrump;
 
     float kittyDistance;
     float topPlayerY;
@@ -68,12 +74,16 @@ public class Dealer : MonoBehaviour
         {
             deck.MoveKittyY(lowerPlayerY + overCardDistance, false);
         }
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            ShowTrumpSelection();
+        }
     }
 
     public void DealCards()
     {
         float shrinkRatio = scaleRatio * spaceAdjustment;
-
+    
         topPlayerY = 200 * shrinkRatio;
         lowerPlayerY = -200 * shrinkRatio;
         overCardDistance = 50 * shrinkRatio;
@@ -126,8 +136,8 @@ public class Dealer : MonoBehaviour
         playerOne.transform.position = new Vector3(screenBounds.x * -1 + boardX, screenBounds.y * -1 + boardY, 300);
         playerTwo.transform.position = new Vector3(screenBounds.x * -1 + boardX, screenBounds.y - boardY, 300);
 
-        playerOne.transform.SetParent(world.transform);
-        playerTwo.transform.SetParent(world.transform);
+        playerOne.transform.SetParent(front.transform);
+        playerTwo.transform.SetParent(front.transform);
     }
 
     public void StartGame()
@@ -143,10 +153,10 @@ public class Dealer : MonoBehaviour
 
     public void AddStartButton()
     {
-        world = GameObject.Find(worldCanvas);
+        front = GameObject.Find(worldCanvas);
         startButton = Instantiate(buttonPrefab);
         startButton.transform.position = new Vector3(0, 0, 300);
-        startButton.transform.SetParent(world.transform);
+        startButton.transform.SetParent(front.transform);
     }
 
     public void AddDeck()
@@ -156,6 +166,41 @@ public class Dealer : MonoBehaviour
         deck = deckInstance.GetComponent<Deck>();
         deck.transform.SetParent(canvas.transform);
         float sizeRatio = scaleRatio * sizeAdjustment;
-        deck.Init(new Vector3(screenBounds.x - 200, (screenBounds.y * -1) + 200, 300), sizeRatio);
+        deck.Init(new Vector3(screenBounds.x - 200, (screenBounds.y * -1) + 200, 300), sizeRatio, screenCanvas);
+    }
+
+    public void ShowTrumpSelection()
+    {
+        trumpSelection = Instantiate(trumpSelectionPrefab);
+        trumpSelection.transform.SetParent(front.transform);
+
+        Trump trump = trumpSelection.GetComponent<Trump>();
+        trump.Init(SetSpadeTrump, SetHeartsTrump, SetDiamondsTrump, SetClubsTrump);
+    }
+
+    public void SetSpadeTrump()
+    {
+        SetTrump(SuitEnum.Spades);
+    }
+    public void SetHeartsTrump()
+    {
+        SetTrump(SuitEnum.Hearts);
+    }
+    public void SetDiamondsTrump()
+    {
+        SetTrump(SuitEnum.Diamonds);
+    }
+    public void SetClubsTrump()
+    {
+        SetTrump(SuitEnum.Clubs);
+    }
+
+    public void SetTrump(SuitEnum suit)
+    {
+        trumpSelection.gameObject.SetActive(false);
+        currentTrump = Instantiate(currentTrumpPrefab);
+        currentTrump.transform.SetParent(front.transform);
+
+        currentTrump.GetComponent<CurrentTrump>().Init(new Vector3(screenBounds.x - 100, screenBounds.y - 50, 300), suit);
     }
 }

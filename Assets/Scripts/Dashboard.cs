@@ -11,25 +11,37 @@ public class Dashboard : MonoBehaviour
     private Text bidText;
     private Text actionText;
 
-    private GameObject bidBoard;
     private GameObject leftArrow;
     private GameObject rightArrow;
     private GameObject actionButton;
 
     private int score = 0;
-    private int bid = 60;
+    private int previousBid = 0;
+    private int bid = 50;
     private int bidIncrements = 5;
     private int bidMin = 50;
     private int bidMax = 210;
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.S) && hasAction)
+        if (hasAction)
         {
-            actionButton.SetActive(true);
-            leftArrow.SetActive(true);
-            rightArrow.SetActive(true);
+            if (Input.GetKeyDown(KeyCode.S))
+            {
+                actionButton.SetActive(true);
+                leftArrow.SetActive(true);
+                rightArrow.SetActive(true);
+            }
+            if (previousBid != bid)
+            {
+                actionText.text = "Bid";
+            }
+            else
+            {
+                actionText.text = "Pass";
+            }
         }
+       
     }
 
     public void Init()
@@ -47,7 +59,7 @@ public class Dashboard : MonoBehaviour
         {
             hasAction = true;
             actionButton = actionButtonTransform.gameObject;
-            actionText = actionButton.GetComponent<Text>();
+            actionText = actionButton.transform.Find("Text").GetComponent<Text>();
             actionButton.SetActive(false);
             Button button = actionButton.GetComponent<Button>();
             button.onClick.AddListener(Action);
@@ -74,7 +86,7 @@ public class Dashboard : MonoBehaviour
     private void SubtractBid()
     {
         int newBid = bid - bidIncrements;
-        if (newBid >= bidMin)
+        if (newBid >= bidMin && newBid >= previousBid)
         {
             SetBid(newBid);
         }
@@ -91,6 +103,7 @@ public class Dashboard : MonoBehaviour
 
     private void Action()
     {
+        previousBid = bid;
         Debug.Log("clicking action");
     }
 
