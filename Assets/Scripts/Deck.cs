@@ -114,6 +114,26 @@ public class Deck : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    public void HideDeck()
+    {
+        for (int i = 0; i < deck.Count; i++)
+        {
+            deck[i].gameObject.SetActive(false);
+        }
+    }
+
+    public void HidePlayerCards()
+    {
+        for (int i = 0; i < playerOne.Count; i++)
+        {
+            playerOne[i].gameObject.SetActive(false);
+        }
+        for (int i = 0; i < playerTwo.Count; i++)
+        {
+            playerTwo[i].gameObject.SetActive(false);
+        }
+    }
+
     public void FlipKitty(float kittyDistance)
     {
         for (int i = 0; i < kitty.Count; i++)
@@ -162,5 +182,22 @@ public class Deck : MonoBehaviour
             }
         }
         kitty.Clear();
+    }
+
+    public void ShowPLayerOneCards(float shrinkRatio)
+    {
+        Debug.Log(shrinkRatio);
+        float y = -350 * shrinkRatio;
+        float change = 130 * shrinkRatio;
+        float cardWidth = 120;
+        float scale = 0.8f;
+        float x = (playerOne.Count * cardWidth * scale) / 2;
+        for (int i = 0; i < playerOne.Count; i++)
+        {
+            Card card = playerOne[i];
+            card.gameObject.SetActive(true);
+            card.transform.localScale = new Vector3(scale, scale, 1);
+            card.Move(new Vector3(x - (i * change), y, 200 * shrinkRatio), true);
+        }
     }
 }

@@ -78,6 +78,10 @@ public class Dealer : MonoBehaviour
         {
             ShowTrumpSelection();
         }
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            ShowPlayerOneCards();
+        }
     }
 
     public void DealCards()
@@ -121,6 +125,18 @@ public class Dealer : MonoBehaviour
         deck.Hide();
     }
 
+    public void DealHands()
+    {
+        int handedCards = 11;
+        for (int i = 0; i < handedCards; i++)
+        {
+            deck.DealCard(new Vector3(0, 0, 0), false, CardHand.PlayerOne);
+            deck.DealCard(new Vector3(0, 0, 0), false, CardHand.PlayerTwo);
+        }
+        deck.HidePlayerCards();
+        deck.Hide();
+    }
+
     public void DisplayDashboard()
     {
         GameObject playerOne = Instantiate(playerOnePrefab);
@@ -146,7 +162,8 @@ public class Dealer : MonoBehaviour
         {
             started = true;
             startButton.SetActive(false);
-            DealCards();
+            //DealCards();
+            DealHands();
             DisplayDashboard();
         }
     }
@@ -202,5 +219,11 @@ public class Dealer : MonoBehaviour
         currentTrump.transform.SetParent(front.transform);
 
         currentTrump.GetComponent<CurrentTrump>().Init(new Vector3(screenBounds.x - 100, screenBounds.y - 50, 300), suit);
+    }
+
+    public void ShowPlayerOneCards()
+    {
+        float shrinkRatio = scaleRatio * spaceAdjustment;
+        deck.ShowPLayerOneCards(shrinkRatio);
     }
 }

@@ -516,6 +516,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2658511708839868829, guid: a9101005b788e46efb19f757189daf6b,
         type: 3}
+    - target: {fileID: 1566256887949606341, guid: 37a745c9ad4cf4016902fe1813b3bc3a,
+        type: 3}
+      propertyPath: currentTrumpPrefab
+      value: 
+      objectReference: {fileID: 490444657474520925, guid: a87563e6813334580a48dbe834243f47,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37a745c9ad4cf4016902fe1813b3bc3a, type: 3}
 --- !u!1001 &2528359934567720554

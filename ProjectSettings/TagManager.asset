@@ -15,8 +15,8 @@ TagManager:
   - 
   - Card
   - Board
-  - 
-  - 
+  - Game
+  - Front
   - 
   - 
   - 
@@ -49,6 +49,9 @@ TagManager:
     locked: 0
   - name: Card
     uniqueID: 2588017667
+    locked: 0
+  - name: Game
+    uniqueID: 3850964319
     locked: 0
   - name: Front
     uniqueID: 2408743113
